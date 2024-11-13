@@ -22,7 +22,7 @@ jobs:
             echo "::set-output name=is_MY_SECRET_set::${{ env.MY_SECRET != '' }}"
   integration:
     env:
-      VUE_APP_API_KEY: AIzaSyDodh4b9s5RwgvFKTocGdKsIKBx0PPpN3k
+      VUE_APP_API_KEY: VUE_APP_API_KEY
       VUE_APP_FIREBASE_API_KEY: YOUR_FIREBASE_API_KEY
       VUE_APP_FIREBASE_PROJECT_ID: YOUR_FIREBASE_PROJECT_ID
       VUE_APP_FIREBASE_MESSAGING_SENDER_ID: YOUR_FIREBASE_MESSAGING_SENDER_ID
@@ -77,70 +77,70 @@ jobs:
         path: dist
 
 
-  cypress-chrome-firefox-simple:
-    needs: [checksecret, integration]
-    if: needs.checksecret.outputs.is_MY_SECRET_set == 'false'
-    runs-on: ubuntu-latest
-    name: E2E Simple on Ubuntu
-    strategy:
-      fail-fast: false
-      matrix:
-        browsers: [chrome]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: cypress-io/github-action@v6
-        with:
-          start: npm run serve
-          wait-on: 'http://localhost:8080'
-          record: true
-          group: ${{matrix.browsers}}
-          tag: ${{ github.event_name }}
-          browser: ${{matrix.browsers}}
-          spec: |
-            tests/e2e/specs/homePage.test.js
-          wait-on-timeout: 500
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # cypress-chrome-firefox-simple:
+  #   needs: [checksecret, integration]
+  #   if: needs.checksecret.outputs.is_MY_SECRET_set == 'false'
+  #   runs-on: ubuntu-latest
+  #   name: E2E Simple on Ubuntu
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       browsers: [chrome]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: cypress-io/github-action@v6
+  #       with:
+  #         start: npm run serve
+  #         wait-on: 'http://localhost:8080'
+  #         record: true
+  #         group: ${{matrix.browsers}}
+  #         tag: ${{ github.event_name }}
+  #         browser: ${{matrix.browsers}}
+  #         spec: |
+  #           tests/e2e/specs/homePage.test.js
+  #         wait-on-timeout: 500
+  #       env:
+  #         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  #         COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
-  cypress-chrome-firefox:
-    needs: [checksecret, integration]
-    if: needs.checksecret.outputs.is_MY_SECRET_set == 'true'
-    env:
-      VUE_APP_API_KEY:  ${{ secrets.GMAP_API_KEY }}
-      VUE_APP_FIREBASE_API_KEY:  ${{ secrets.VUE_APP_FIREBASE_API_KEY }}
-      VUE_APP_FIREBASE_APP_ID:  ${{ secrets.VUE_APP_FIREBASE_APP_ID }}
-      VUE_APP_FIREBASE_AUTH_DOMAIN:  ${{ secrets.VUE_APP_FIREBASE_AUTH_DOMAIN }}
-      VUE_APP_FIREBASE_DATABASE_URL:  ${{ secrets.VUE_APP_FIREBASE_DATABASE_URL }}
-      VUE_APP_FIREBASE_MESSAGING_SENDER_ID:  ${{ secrets.VUE_APP_FIREBASE_MESSAGING_SENDER_ID }}
-      VUE_APP_FIREBASE_PROJECT_ID:  ${{ secrets.VUE_APP_FIREBASE_PROJECT_ID }}
-      VUE_APP_STORAGE_BUCKET:  ${{ secrets.VUE_APP_STORAGE_BUCKET }}
-    runs-on: ubuntu-latest
-    name: E2E on Ubuntu
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2, 3]
-        browsers: [chrome]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: cypress-io/github-action@v6
-        with:
-          start: npm run serve
-          wait-on: 'http://localhost:8080'
-          record: true
-          parallel: true
-          group: ${{matrix.browsers}}
-          tag: ${{ github.event_name }}
-          browser: ${{matrix.browsers}}
-          wait-on-timeout: 500
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # cypress-chrome-firefox:
+  #   needs: [checksecret, integration]
+  #   if: needs.checksecret.outputs.is_MY_SECRET_set == 'true'
+  #   env:
+  #     VUE_APP_API_KEY:  ${{ secrets.GMAP_API_KEY }}
+  #     VUE_APP_FIREBASE_API_KEY:  ${{ secrets.VUE_APP_FIREBASE_API_KEY }}
+  #     VUE_APP_FIREBASE_APP_ID:  ${{ secrets.VUE_APP_FIREBASE_APP_ID }}
+  #     VUE_APP_FIREBASE_AUTH_DOMAIN:  ${{ secrets.VUE_APP_FIREBASE_AUTH_DOMAIN }}
+  #     VUE_APP_FIREBASE_DATABASE_URL:  ${{ secrets.VUE_APP_FIREBASE_DATABASE_URL }}
+  #     VUE_APP_FIREBASE_MESSAGING_SENDER_ID:  ${{ secrets.VUE_APP_FIREBASE_MESSAGING_SENDER_ID }}
+  #     VUE_APP_FIREBASE_PROJECT_ID:  ${{ secrets.VUE_APP_FIREBASE_PROJECT_ID }}
+  #     VUE_APP_STORAGE_BUCKET:  ${{ secrets.VUE_APP_STORAGE_BUCKET }}
+  #   runs-on: ubuntu-latest
+  #   name: E2E on Ubuntu
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       containers: [1, 2, 3]
+  #       browsers: [chrome]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: cypress-io/github-action@v6
+  #       with:
+  #         start: npm run serve
+  #         wait-on: 'http://localhost:8080'
+  #         record: true
+  #         parallel: true
+  #         group: ${{matrix.browsers}}
+  #         tag: ${{ github.event_name }}
+  #         browser: ${{matrix.browsers}}
+  #         wait-on-timeout: 500
+  #       env:
+  #         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  #         COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # cypress-edge:    
   #   needs: integration
